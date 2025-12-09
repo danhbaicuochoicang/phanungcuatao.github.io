@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xem Ảnh Full Màn Hình</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        #uploadBox {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        #uploadBox input {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        #fullImage {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            display: none;
+            cursor: pointer;
+        }
+
+        #hintText {
+            display: none;
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+            color: white;
+            text-shadow: 0 0 8px black;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hộp thêm ảnh ban đầu -->
+    <div id="uploadBox">
+        <h2>Chọn một ảnh để hiển thị toàn màn hình</h2>
+        <input type="file" id="imgUpload" accept="image/*">
+    </div>
+
+    <!-- Ảnh full màn hình -->
+    <img id="fullImage">
+
+    <!-- Hướng dẫn đổi ảnh -->
+    <div id="hintText">Nhấn vào ảnh để chọn ảnh khác</div>
+
+<script>
+    const uploadBox = document.getElementById("uploadBox");
+    const imgUpload = document.getElementById("imgUpload");
+    const fullImage = document.getElementById("fullImage");
+    const hintText = document.getElementById("hintText");
+
+    // Hàm tải ảnh
+    function loadImage(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            fullImage.src = e.target.result;
+            fullImage.style.display = "block";
+            uploadBox.style.display = "none";
+            hintText.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Khi chọn ảnh lần đầu
+    imgUpload.addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) loadImage(file);
+    });
+
+    // Khi nhấn vào ảnh để đổi ảnh khác
+    fullImage.addEventListener("click", function() {
+        const newInput = document.createElement("input");
+        newInput.type = "file";
+        newInput.accept = "image/*";
+
+        newInput.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) loadImage(file);
+        });
+
+        newInput.click(); // Mở hộp chọn ảnh
+    });
+</script>
+
+</body>
+</html>
